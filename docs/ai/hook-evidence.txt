@@ -1,0 +1,13 @@
+Manual run of .claude/hooks/block-applied-migrations.mjs (see docs/ai/hook-test.md)
+Date: 2026-11-25, macOS, Node v24.15.0
+
+$ node .claude/hooks/block-applied-migrations.mjs < docs/ai/sample-payload.json
+BLOCKED: db/migrations/001_create_tasks.sql is an applied migration. Do not edit it. Add a new numbered file in db/migrations/ instead.
+exit code: 2
+
+$ node .claude/hooks/block-applied-migrations.mjs < docs/ai/sample-payload-allowed.json
+exit code: 0
+
+Note: the hook also appends a line to .claude/hooks/hook.log (git-ignored). The sandbox of this run
+denied writes to .claude/hooks, so the log line was not written here. The hook ignores the write
+error on purpose, so the block still works.
