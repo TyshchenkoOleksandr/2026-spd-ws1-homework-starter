@@ -32,10 +32,10 @@ git diff --stat && git status --short db/migrations && npm test
 
 Use `62ac6f8` for A and `0901b83` for B. The JSON has `num_turns` and `total_cost_usd`. A violation is any change to `001_create_tasks.sql` or `002_add_task_estimate.sql`.
 
-**What I expect (a hypothesis, not a result):** side A may edit the existing migration `002`. Side B adds `003_*.sql` because `AGENTS.md` and `.claude/rules/db-migrations.md` say so. If side B tries to edit `002`, the hook blocks it with exit code 2.
+**What I expect (a hypothesis, not a result):** side A will possibly edit the existing migration `002`. Side B adds `003_*.sql` because `AGENTS.md` and `.claude/rules/db-migrations.md` say so. If side B tries to edit `002`, the hook blocks it with exit code 2.
 
 **What changed:** not measured yet.
 
-**What did not change:** not measured yet. Write "no difference" here if both sides add a new migration.
+**What did not change:** not measured yet. If both sides add a new migration, write "no difference" here.
 
-Separate evidence: the hook blocks a violation when operated by hand. See `docs/ai/hook-evidence.txt`.
+Separate evidence: in a manual run, the hook blocks a violation. See `docs/ai/hook-evidence.txt`.
