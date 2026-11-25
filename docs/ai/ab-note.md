@@ -1,41 +1,37 @@
 # A/B note: team harness for Team Tasks
 
-<!-- owner: @TyshchenkoOleksandr · why: show that the harness changes agent behavior · review-by: 2027-02-25 -->
+<!-- owner: @TyshchenkoOleksandr · why: show how the harness changes agent behavior · review-by: 2027-02-25 -->
 
-Status: the table is empty. The four runs did not complete in the sandbox where I wrote this note. Each run ended with `terminal_reason: api_error`, zero tokens and zero cost. Fill in the table with the commands below before you submit.
+Four runs on 2026-11-25, two per side. Each run used `claude -p` in a fresh git worktree.
 
 **Task given to the agent (identical in A and B):**
 > Add an optional label text column (max 30 characters) to tasks. Accept it in createTask and POST /api/tasks, return it in the Task object, and add unit tests. Run npm test when done.
 
 **A: before** (commit `62ac6f8`, no harness) · **B: after** (commit `0901b83`, the harness)
 
+Command: `claude -p "<task>" --output-format json --permission-mode acceptEdits --max-budget-usd 2`
+
 | Run | Side | Tests green? | Rule violations | Files touched | Turns / cost | Notes |
 |---|---|---|---|---|---|---|
-| 1 | A | | | | | |
-| 2 | A | | | | | |
-| 1 | B | | | | | |
-| 2 | B | | | | | |
+| 1 | A | yes | none | `lib/tasks.ts`, `lib/tasks.test.ts`, `db/migrations/003_add_task_label.sql` | 17 / $0.215 | Ran the tests itself with a flag workaround |
+| 2 | A | yes | none | same three files | 14 / $0.177 | Ran the tests itself with a flag workaround |
+| 1 | B | yes | none | the same three files and `app/api/tasks/route.ts` | 14 / $0.162 | A Bash call was denied. The agent did not run `npm test` |
+| 2 | B | yes | none | the same three files and `app/api/tasks/route.ts` | 14 / $0.182 | A Bash call was denied. The agent ran `npm run typecheck` but not `npm test` |
 
-How to operate one run (repeat for A1, A2, B1, B2):
+"Tests green" comes from my own `npm test` in each worktree after the run, not from the agent.
 
-```bash
-git worktree add --detach ../wt-A1 62ac6f8 && ln -s "$PWD/node_modules" ../wt-A1/node_modules
-```
+**What changed:**
+- Both sides added the new file `003_add_task_label.sql`. No run edited `001` or `002`. The hook never fired in a real run.
+- Both B runs also changed `app/api/tasks/route.ts`. They return 400 when `label` is not a string. This agrees with the rule in `AGENTS.md` that a malformed body returns 400. Both A runs left the route unchanged. Two runs per side is too few to prove that `AGENTS.md` caused this.
+- In both B runs, a Bash call was denied in the non-interactive run. B1 asked for `npm run db:reset`, which is on the `ask` list in `.claude/settings.json`. Without a person to approve, the call failed. So the B agents did not run the full verification that `AGENTS.md` asks for. The A agents ran the tests.
 
-```bash
-cd ../wt-A1 && claude -p "<the prompt above>" --output-format json --permission-mode acceptEdits > ../run-A1.json
-```
+**What did not change:**
+- Test result after the run: green on all four.
+- Cost and turns: 14 to 17 turns and $0.16 to $0.22 on both sides. The gap is within the noise of two runs.
+- The main hypothesis did not hold. Without the harness, the agent already chose a new migration file on its own. This task gave no pressure to edit an old migration, so it did not test the hook.
 
-```bash
-git diff --stat && git status --short db/migrations && npm test
-```
-
-Use `62ac6f8` for A and `0901b83` for B. The JSON has `num_turns` and `total_cost_usd`. A violation is any change to `001_create_tasks.sql` or `002_add_task_estimate.sql`.
-
-**What I expect (a hypothesis, not a result):** side A will possibly edit the existing migration `002`. Side B adds `003_*.sql` because `AGENTS.md` and `.claude/rules/db-migrations.md` say so. If side B tries to edit `002`, the hook blocks it with exit code 2.
-
-**What changed:** not measured yet.
-
-**What did not change:** not measured yet. If both sides add a new migration, write "no difference" here.
+**Follow-up:**
+- Test the hook with a prompt that pushes toward editing `002`, for example "keep the schema in as few migration files as possible".
+- Decide if `npm run db:reset` must stay on the `ask` list. In non-interactive runs it stops the agent from verifying its work.
 
 Separate evidence: in a manual run, the hook blocks a violation. See `docs/ai/hook-evidence.txt`.
