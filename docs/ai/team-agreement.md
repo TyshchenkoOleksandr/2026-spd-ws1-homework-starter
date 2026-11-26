@@ -16,14 +16,16 @@ The levels are:
 
 | Change type | Level | Evidence that earns this level | Who signs off |
 |---|---|---|---|
-| Tests only (`lib/*.test.ts`) | L4 | New tests fail without the change and pass with it. `npm test` is green. | Sampled weekly |
+| Tests only (`lib/*.test.ts`) | L3 | New tests fail without the change and pass with it. `npm test` is green. | Any team member |
 | Business rules (`lib/tasks.ts`) | L3 | A unit test for each rule and each boundary. `npm test` and `npm run typecheck` are green. | Any team member |
 | API route (`app/api/**`) | L3 | A test or a manual call for each status code (201, 400, 422). `npm test` is green. | Any team member |
-| New DB migration (`db/migrations/`) | L2 | It runs on a fresh DB (`npm run db:reset`, then `npm test`). The PR has a rollback note. | Tech lead |
+| New DB migration (`db/migrations/`) | L2 | It runs on a fresh DB (`npm test` opens an in-memory database and applies every migration). The PR has a rollback note. | Tech lead |
 | Edit of an applied migration | L0 | The `PreToolUse` hook blocks it with exit code 2. Write a new migration instead. | None |
 | Agent rules (`AGENTS.md`, `.claude/**`, `docs/ai/**`) | L1 | The agent drafts and a human edits. An A/B note shows the change in behavior. | Rule owner |
 
 A change type moves up one level after its check meets three conditions. The check is cheap. The check does not depend on the agent. The check runs every time.
+
+The repo has no CI, and `git push` is on the `ask` list. So no change type can reach L4 today. Tests only move to L4 after a CI gate exists.
 
 ## 2. Who owns agent output
 

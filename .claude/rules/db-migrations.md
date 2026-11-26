@@ -10,5 +10,5 @@ paths:
 - Never change a file that already exists here. A database that applied it will not run it again.
 - To change the schema, add a new file. For example `003_add_task_label.sql`.
 - Use plain SQL for SQLite. One logical change per file.
-- After you add a file, run `npm run db:reset` and then `npm test`.
+- After you add a file, run `npm test`. It applies every migration to a fresh in-memory database.
 - State the rollback in the PR description. SQLite has no down migrations in this repo.
