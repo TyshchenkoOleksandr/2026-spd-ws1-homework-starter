@@ -3,4 +3,6 @@
 /.claude/            @TyshchenkoOleksandr
 /docs/ai/            @TyshchenkoOleksandr
 /.github/CODEOWNERS  @TyshchenkoOleksandr
+/.github/workflows/  @TyshchenkoOleksandr
+/.github/pull_request_template.md @TyshchenkoOleksandr
 /db/migrations/      @TyshchenkoOleksandr
