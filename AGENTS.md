@@ -23,4 +23,5 @@ Next.js 16 app with a task API, SQLite (`node:sqlite`) and Vitest. Needs Node.js
 - Autonomy levels and owners: `docs/ai/team-agreement.md`
 - Migration rule: `.claude/rules/db-migrations.md`
 - Migration procedure: `.claude/skills/add-migration/SKILL.md`
+- Commit trailers (`Refs:`, `Assisted-by:`, `Evidence:`): `.claude/rules/commit-trailers.md`
 - End a session with a note from `docs/ai/handoff-template.md`
