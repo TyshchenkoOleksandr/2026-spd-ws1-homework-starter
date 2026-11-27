@@ -1,30 +1,33 @@
-## Participant
+<!-- owner: @TyshchenkoOleksandr · why: a reader can walk from a merge commit to the requirement, the checks and the reviewer · review-by: 2027-02-25 -->
+<!-- Title: "<KEY> <imperative summary>", for example "TASK-7 Whole-hour estimates". The CI trace gate reads the key from the title. -->
+## Requirement
 
-- **First and last name (required):**
-- GitHub handle:
+- Ticket: <!-- link, for example docs/tickets/TASK-7.md -->
+- Spec: <!-- link to the committed spec: acceptance criteria and non-goals -->
 
-## What I built
+## Scope
 
-<!-- 3–5 sentences: the harness, and why these rules for this repo -->
+<!-- What changes, in 1 to 3 lines. One purpose per PR. What this PR does not change. -->
 
-## Checklist
+## Verified, and how
 
-- [ ] `docs/ai/team-agreement.md` — autonomy matrix with ≥ 4 change types, owners, how rules change
-- [ ] short root `AGENTS.md`, no `CLAUDE.md`
-- [ ] path rule in `.claude/rules/` with `paths:`
-- [ ] skill in `.claude/skills/`
-- [ ] handoff template
-- [ ] blocking hook + evidence (log or manual run output with exit code)
-- [ ] permissions in `.claude/settings.json` (deny + ask)
-- [ ] `.github/CODEOWNERS`
-- [ ] A/B note, ≥ 2 runs per side
+- Revision: <!-- the full SHA that the checks ran on -->
+- Evidence: <!-- docs/evidence/<KEY>/<slice>.md: commands, outputs, exit codes -->
+- Tests that prove the acceptance criteria: <!-- file and test names -->
 
-## Hook evidence
+## Known gaps
 
-<!-- paste the log lines or the manual run: command, stderr, exit code -->
+<!-- What was not verified, and why. If you verified everything, write "None". -->
 
-## Environment
+## Rollback
 
-- Claude Code version (`claude --version`):
-- OS:
-- Anything that didn't work as documented:
+<!-- How to undo the change: revert the merge commit? Data or configuration to restore? -->
+
+## Agent involvement
+
+<!-- None, or: tool and model, and what it did (spec draft, code, tests, review). This matches the Assisted-by trailers. -->
+
+## Accountable
+
+- Author: <!-- @handle: answers for this change after merge -->
+- Reviewer: <!-- @handle of the human who judged the change. If no human reviewed it, write that here. Link or paste agent review findings below. -->
